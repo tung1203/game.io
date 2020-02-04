@@ -47,12 +47,12 @@ class GamePlay {
       }
     } else {
       // this.sword.delay = Math.max(0, this.sword.delay - delta);
-      if (this.sword.countAngle < (Math.PI * 3) / 4) {
+      if (this.sword.countAngle < Math.PI) {
         this.sword.rotate += Math.PI / this.sword.speed;
         this.sword.countAngle += Math.PI / this.sword.speed;
         this.tmp2.push(this.sword.rotate);
       }
-      if (this.sword.countAngle >= (Math.PI * 3) / 4) {
+      if (this.sword.countAngle >= Math.PI) {
         this.sword.rotate -= Math.PI / this.sword.speed;
         if (this.sword.rotate <= this.tmp2[0]) {
           this.sword.countAngle = 0;
@@ -81,7 +81,7 @@ class GamePlay {
       this.sword.drawSword(
         batch,
         whiteTex,
-        this.sword.rotate,
+        this.sword.rotate - Math.PI / 2,
         0,
         -this.player.radius / 2
       );

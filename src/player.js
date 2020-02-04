@@ -4,7 +4,7 @@ class Player {
   constructor() {
     this.position = new Vector2(20, 20);
     this.target = new Vector2(20, 20);
-    this.speed = 10;
+    this.speed = 50;
     this.velocity = 0;
     this.radius = 20;
     this.attacking = false;
