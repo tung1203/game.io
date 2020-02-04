@@ -46,6 +46,7 @@ const init = async () => {
     batch.setProjection(cam.combined);
     // batch.begin();
     game.draw(delta / 1000, batch, whiteTex, imagePlayer);
+
     // batch.draw(whiteTex, 60, 50, 10, 10);
     // batch.end();
     requestAnimationFrame(loop);
