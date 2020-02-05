@@ -18,6 +18,8 @@ class GamePlay {
     this.tmp2 = [];
     this.tmp = new Vector2();
     this.tmp3 = new Vector2();
+    this.tmp4 = new Vector2();
+    this.test = new Vector2();
 
     this.inputHandler = new InputHandle(canvas);
     new Input(this.player);
@@ -30,12 +32,24 @@ class GamePlay {
         this.sword.position.y + this.sword.height
       );
       let farest = this.player.position.distance(this.tmp3);
-      if (
-        this.bot.position.distance(this.player.position) -
-          this.bot.radius / 2 <=
-        farest
-      ) {
+      if (this.player.rotate < 0) {
+        this.player.rotate = Math.PI * 2 + this.player.rotate;
+      }
+      this.tmp4.set(
+        this.player.position.x + farest * Math.cos(this.sword.rotate),
+        this.player.position.y + farest * Math.sin(this.sword.rotate)
+      );
+      // this.test.set(
+      //   this.bot.position.x + 10 * Math.cos(this.player.rotate),
+      //   this.bot.position.y + 10 * Math.sin(this.player.rotate)
+      // );
+      // console.log(this.player.rotate / Math.PI);
+      console.log(this.player.position);
+      console.log(this.tmp4);
+
+      if (this.tmp4.distance(this.bot.position) <= this.bot.radius / 2) {
         this.bot.died = true;
+        console.log("1");
       }
     }
   };
