@@ -3,6 +3,7 @@ import InputHandle from "gdxjs/lib/InputHandler";
 import Vector2 from "gdxjs/lib/vector2";
 import Input from "./input";
 import Sword from "./sword.js";
+import Bot from "./bot.js";
 
 class GamePlay {
   constructor(canvas, worldWidth, worldHeight, cam) {
@@ -11,14 +12,33 @@ class GamePlay {
     this.worldWidth = worldWidth;
     this.cam = cam;
     this.player = new Player();
+    this.bot = new Bot();
     this.sword = new Sword();
 
     this.tmp2 = [];
     this.tmp = new Vector2();
+    this.tmp3 = new Vector2();
 
     this.inputHandler = new InputHandle(canvas);
     new Input(this.player);
   }
+
+  checkCollide = () => {
+    if (this.player.attacking) {
+      this.tmp3.set(
+        this.sword.position.x + this.sword.width,
+        this.sword.position.y + this.sword.height
+      );
+      let farest = this.player.position.distance(this.tmp3);
+      if (
+        this.bot.position.distance(this.player.position) -
+          this.bot.radius / 2 <=
+        farest
+      ) {
+        this.bot.died = true;
+      }
+    }
+  };
 
   playerTarget = () => {
     const worldPosition = [];
@@ -47,12 +67,12 @@ class GamePlay {
       }
     } else {
       // this.sword.delay = Math.max(0, this.sword.delay - delta);
-      if (this.sword.countAngle < Math.PI) {
+      if (this.sword.countAngle < (Math.PI * 5) / 6) {
         this.sword.rotate += Math.PI / this.sword.speed;
         this.sword.countAngle += Math.PI / this.sword.speed;
         this.tmp2.push(this.sword.rotate);
       }
-      if (this.sword.countAngle >= Math.PI) {
+      if (this.sword.countAngle >= (Math.PI * 5) / 6) {
         this.sword.rotate -= Math.PI / this.sword.speed;
         if (this.sword.rotate <= this.tmp2[0]) {
           this.sword.countAngle = 0;
@@ -64,6 +84,7 @@ class GamePlay {
   };
 
   draw = (delta, batch, whiteTex, imagePlayer) => {
+    this.checkCollide();
     if (!this.player.died) {
       if (!this.player.attacking && !this.player.shielding) {
         this.sword.position.set(
@@ -85,6 +106,9 @@ class GamePlay {
         0,
         -this.player.radius / 2
       );
+    }
+    if (!this.bot.died) {
+      this.bot.drawBot(batch, imagePlayer, this.player.rotate);
     }
   };
 
